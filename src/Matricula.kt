@@ -1,6 +1,9 @@
 import java.util.*
+import java.time.LocalDate
 
-class Matricula (aluno: Aluno,
-                 curso: Curso,
-                 matricula:Date) {
+class Matricula(
+    var aluno: Aluno?,
+    var curso: Curso?,
+    var dataMatricula: LocalDate = LocalDate.now()
+) {
 }

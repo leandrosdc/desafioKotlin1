@@ -1,11 +1,14 @@
+import java.time.LocalDate
+
 class DigitalHouseManager{
+
     var alunos = mutableListOf<Aluno>()
     var professores = mutableListOf<Professor>()
     var cursos = mutableListOf<Curso>()
     var matriculas = mutableListOf<Matricula>()
 
-    fun registrarCurso(nome:String, codigo:Int, quantidadeAlunos:Int){
-        cursos.add(Curso(nome, codigo, quantidadeAlunos))
+    fun registrarCurso(nome:String, codigo:Int, quantidadeMaxAluno:Int){
+        cursos.add(Curso(nome, codigo, quantidadeMaxAluno))
     }
 
     fun excluirCurso(codigoCurso:Int){
@@ -16,12 +19,13 @@ class DigitalHouseManager{
         }
     }
 
+
     fun registrarProfessorAdjunto(nomeProfessor:String, sobrenomeProfessor:String, codigoProfessor:Int, horasMonitoria:Int){
-        professores.add(professorAdjunto(nomeProfessor, sobrenomeProfessor, codigoProfessor, horasMonitoria))
+        professores.add(Professor(nomeProfessor, sobrenomeProfessor, codigoProfessor, horasMonitoria))
     }
 
     fun registrarProfessorTitular(nomeProfessor:String, sobrenomeProfessor:String, codigoProfessor:Int, especialidade:String){
-        professores.add(ProfessorTitular(nomeProfessor, sobrenomeProfessor, codigoProfessor, especialidade))
+        professores.add(Professor(nomeProfessor, sobrenomeProfessor, codigoProfessor, especialidade))
     }
 
     fun excluirProfessor(codigoProfessor: Int){
@@ -32,11 +36,29 @@ class DigitalHouseManager{
         }
     }
 
-    fun matricularAluno(nomeAluno:String, sobrenomeAluno:String, codigoAluno:Int){
-        alunos.add(Aluno(nomeAluno,sobrenomeAluno, codigoAluno))
+    fun matricularAluno(codigoAluno: Int, codigoCurso:Int){
+        var aluno1:Aluno? = null
+        var curso1:Curso? = null
+        alunos.forEach{ if(codigoAluno == it.codigoAluno){ aluno1 = it } }
+        cursos.forEach{ if(codigoCurso == it.codigoCurso){ curso1 = it } }
+        if(curso1?.salaLotada() == false){
+            matriculas.add(Matricula(aluno1, curso1, LocalDate.now()))
+            println(matriculas.last().dataMatricula)
+        }else{
+            println("Não foi possivel realizar a matricula devido a sala Lotada")
+        }
     }
 
     fun alocarProfessores(codigoCurso:Int, codigoProfessorAdjunto: Int, codigoProfessorTitular: Int){
-
+        var profadj:Professor? = null
+        var proftit:Professor? = null
+        professores.forEach{ if(it.codigoProfessor == codigoProfessorAdjunto){ profadj = it } }
+        professores.forEach{ if(it.codigoProfessor == codigoProfessorTitular){ proftit = it } }
+        cursos.forEach{
+            if(it.codigoCurso == codigoCurso){
+                it.professorTitular = proftit
+                it.professorAdjunto = profadj
+            }
+        }
     }
 }
