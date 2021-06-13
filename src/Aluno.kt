@@ -1,4 +1,4 @@
-class Aluno (var nomeAluno:String,
-             var sobrenomeAluno:String,
+class Aluno (var nomeAluno:String? = null,
+             var sobrenomeAluno:String? = null,
              var codigoAluno:Int){
 }
